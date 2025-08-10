@@ -790,7 +790,7 @@ ul {
 .partners-carousel {
     display: flex;
     gap: 40px;
-    width: auto;
+    width: max-content;
     will-change: transform;
 }
 
@@ -801,7 +801,6 @@ ul {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px;
 }
 
 .partner-logo img {
@@ -1493,6 +1492,7 @@ html, body {
         font-size: 13px !important;
     }
 }
+
 
 
 
