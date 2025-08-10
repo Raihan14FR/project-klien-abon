@@ -1269,3 +1269,17 @@ ul {
         height: 180px;
     }
 }
+
+/* Reset dasar */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-text-size-adjust: 100%;
+}
+
+/* Perbaiki overflow horizontal */
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+}
