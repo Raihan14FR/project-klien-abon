@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     window.addEventListener('scroll', updateHeaderOnScroll);
-    updateHeaderOnScroll(); // Initialize on load
+    updateHeaderOnScroll();
 
     // ======================
     // Mobile Menu Toggle
@@ -24,16 +24,10 @@ document.addEventListener('DOMContentLoaded', function() {
     mobileMenuToggle.addEventListener('click', function() {
         this.classList.toggle('active');
         mainNav.classList.toggle('active');
-        
-        // Toggle body overflow when menu is open
-        if (mainNav.classList.contains('active')) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
+        document.body.style.overflow = mainNav.classList.contains('active') ? 'hidden' : '';
     });
 
-    // Close mobile menu when clicking on nav links
+    // Close mobile menu when clicking nav links
     document.querySelectorAll('.main-nav a').forEach(link => {
         link.addEventListener('click', () => {
             if (mainNav.classList.contains('active')) {
@@ -70,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     window.addEventListener('scroll', setActiveLink);
-    setActiveLink(); // Initialize on load
+    setActiveLink();
 
     // ======================
     // Hero Slider
@@ -81,24 +75,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const nextBtn = document.querySelector('.slider-next');
     let currentSlide = 0;
     let slideInterval;
-    const slideDuration = 10000; // 10 seconds
+    const slideDuration = 10000;
     
     function showSlide(n) {
         slides.forEach(slide => slide.classList.remove('active'));
         dots.forEach(dot => dot.classList.remove('active'));
-        
         currentSlide = (n + slides.length) % slides.length;
         slides[currentSlide].classList.add('active');
         dots[currentSlide].classList.add('active');
     }
     
-    function nextSlide() {
-        showSlide(currentSlide + 1);
-    }
-    
-    function prevSlide() {
-        showSlide(currentSlide - 1);
-    }
+    function nextSlide() { showSlide(currentSlide + 1); }
+    function prevSlide() { showSlide(currentSlide - 1); }
     
     function startSlider() {
         slideInterval = setInterval(nextSlide, slideDuration);
@@ -109,45 +97,27 @@ document.addEventListener('DOMContentLoaded', function() {
         startSlider();
     }
     
-    // Event Listeners for Slider
-    nextBtn.addEventListener('click', function() {
-        nextSlide();
-        resetSliderTimer();
-    });
-    
-    prevBtn.addEventListener('click', function() {
-        prevSlide();
-        resetSliderTimer();
-    });
+    nextBtn.addEventListener('click', () => { nextSlide(); resetSliderTimer(); });
+    prevBtn.addEventListener('click', () => { prevSlide(); resetSliderTimer(); });
     
     dots.forEach((dot, index) => {
-        dot.addEventListener('click', function() {
-            showSlide(index);
-            resetSliderTimer();
-        });
+        dot.addEventListener('click', () => { showSlide(index); resetSliderTimer(); });
     });
     
-    // Start the slider
     startSlider();
 
     // Pause slider on hover
     const sliderContainer = document.querySelector('.slider-container');
-    sliderContainer.addEventListener('mouseenter', () => {
-        clearInterval(slideInterval);
-    });
-    
-    sliderContainer.addEventListener('mouseleave', () => {
-        resetSliderTimer();
-    });
+    sliderContainer.addEventListener('mouseenter', () => clearInterval(slideInterval));
+    sliderContainer.addEventListener('mouseleave', resetSliderTimer);
 
     // ======================
-    // Language Switcher with Flags
+    // Language Switcher
     // ======================
     const languageSelect = document.getElementById('language-select');
     const selectedFlagIcon = document.getElementById('selected-flag-icon');
     const translatableElements = document.querySelectorAll('[data-i18n]');
     
-    // Translation dictionary
     const translations = {
         en: {
             "hero_title": "Premium Indonesian Shredded Meat for the World",
@@ -210,29 +180,17 @@ document.addEventListener('DOMContentLoaded', function() {
             "contact_subtitle": "Untuk pertanyaan atau pemesanan, silakan isi formulir di bawah ini"
         }
     };
+    };
     
     function updateContent(lang) {
-        // Temporarily hide content to prevent layout shift
         document.body.style.opacity = '0';
-        
         translatableElements.forEach(element => {
             const key = element.getAttribute('data-i18n');
-            if (translations[lang] && translations[lang][key]) {
-                element.textContent = translations[lang][key];
-            }
+            if (translations[lang]?.[key]) element.textContent = translations[lang][key];
         });
-        
-        // Update flag icon
-        const flagPath = lang === 'en' 
-            ? 'assets/icons/gb-eng.svg' 
-            : 'assets/icons/id.svg';
-        selectedFlagIcon.src = flagPath;
+        selectedFlagIcon.src = lang === 'en' ? 'assets/icons/gb-eng.svg' : 'assets/icons/id.svg';
         selectedFlagIcon.alt = lang === 'en' ? 'English' : 'Indonesian';
-        
-        // Restore visibility after a short delay
-        setTimeout(() => {
-            document.body.style.opacity = '1';
-        }, 50);
+        setTimeout(() => { document.body.style.opacity = '1'; }, 50);
     }
     
     languageSelect.addEventListener('change', function() {
@@ -241,10 +199,7 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('preferredLang', selectedLang);
     });
     
-    // Initialize with preferred language
-    const preferredLang = localStorage.getItem('preferredLang') || 'en';
-    languageSelect.value = preferredLang;
-    updateContent(preferredLang);
+    updateContent(localStorage.getItem('preferredLang') || 'en');
 
     // ======================
     // Smooth Scrolling
@@ -252,38 +207,100 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             e.preventDefault();
-            
             const targetId = this.getAttribute('href');
             if (targetId === '#') return;
             
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
-                // Close mobile menu if open
                 if (mainNav.classList.contains('active')) {
                     mobileMenuToggle.classList.remove('active');
                     mainNav.classList.remove('active');
                     document.body.style.overflow = '';
                 }
-                
-                window.scrollTo({
-                    top: targetElement.offsetTop - 50,
-                    behavior: 'smooth'
-                });
+                window.scrollTo({ top: targetElement.offsetTop - 50, behavior: 'smooth' });
             }
         });
     });
 
-    document.querySelectorAll('.partner-logo').forEach(logo => {
-    logo.addEventListener('mouseenter', () => {
+    // ======================
+    // Partner Carousel (FIXED FOR ALL DEVICES)
+    // ======================
+    const initPartnerCarousel = () => {
+        const container = document.querySelector('.partners-carousel-container');
         const carousel = document.querySelector('.partners-carousel');
-        carousel.style.animationPlayState = 'paused';
-    });
-    
-    logo.addEventListener('mouseleave', () => {
-        const carousel = document.querySelector('.partners-carousel');
-        carousel.style.animationPlayState = 'running';
-    });
-});
+        const logos = document.querySelectorAll('.partner-logo');
+        
+        if (!carousel || !logos.length) return;
+
+        // Clone logos for infinite loop effect
+        const clonedLogos = Array.from(logos).map(logo => logo.cloneNode(true));
+        clonedLogos.forEach(clone => carousel.appendChild(clone));
+
+        let speed = 1.5;
+        let isScrolling = true;
+        let animationId;
+        let isDragging = false;
+        let startX, scrollLeft;
+
+        function autoScroll() {
+            if (!isScrolling || isDragging) return;
+            
+            carousel.scrollLeft += speed;
+            
+            // Reset when reaching half of carousel
+            if (carousel.scrollLeft >= (carousel.scrollWidth / 2)) {
+                carousel.scrollLeft = 0;
+            }
+            
+            animationId = requestAnimationFrame(autoScroll);
+        }
+
+        // Start auto-scroll
+        autoScroll();
+
+        // Pause on hover (desktop only)
+        if (window.matchMedia("(hover: hover)").matches) {
+            container.addEventListener('mouseenter', () => {
+                isScrolling = false;
+            });
+            
+            container.addEventListener('mouseleave', () => {
+                isScrolling = true;
+                autoScroll();
+            });
+        }
+
+        // Touch support for mobile
+        carousel.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            isScrolling = false;
+            startX = e.touches[0].pageX;
+            scrollLeft = carousel.scrollLeft;
+            cancelAnimationFrame(animationId);
+        }, { passive: true });
+
+        carousel.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const x = e.touches[0].pageX;
+            const walk = (x - startX) * 2;
+            carousel.scrollLeft = scrollLeft - walk;
+        }, { passive: false });
+
+        carousel.addEventListener('touchend', () => {
+            isDragging = false;
+            isScrolling = true;
+            autoScroll();
+        });
+
+        // Cleanup on resize
+        window.addEventListener('resize', () => {
+            carousel.scrollLeft = 0;
+        });
+    };
+
+    // Initialize partner carousel
+    initPartnerCarousel();
 
     // ======================
     // Prevent Layout Shift on Load
@@ -292,77 +309,3 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.style.opacity = '1';
     });
 });
-
-const initPartnerCarousel = () => {
-    const carousel = document.querySelector('.partners-carousel');
-    const logos = document.querySelectorAll('.partner-logo');
-    
-    if (!carousel || !logos.length) return;
-
-    // Clone logos untuk efek infinite loop
-    const clonedLogos = Array.from(logos).map(logo => logo.cloneNode(true));
-    clonedLogos.forEach(clone => carousel.appendChild(clone));
-
-    let isPaused = false;
-    let animationFrameId;
-    let scrollSpeed = 1; // Kecepatan scroll (bisa disesuaikan)
-    let direction = -1; // -1 untuk kiri, 1 untuk kanan
-
-    const animate = () => {
-        if (isPaused) return;
-        
-        carousel.scrollLeft += scrollSpeed * direction;
-        
-        // Reset scroll position saat mencapai setengah carousel
-        if (carousel.scrollLeft >= (carousel.scrollWidth / 2)) {
-            carousel.scrollLeft = 0;
-        } else if (carousel.scrollLeft <= 0) {
-            carousel.scrollLeft = carousel.scrollWidth / 2;
-        }
-        
-        animationFrameId = requestAnimationFrame(animate);
-    };
-
-    // Start animation
-    animate();
-
-    // Pause on hover (hanya untuk desktop)
-    if (window.matchMedia("(hover: hover)").matches) {
-        carousel.addEventListener('mouseenter', () => {
-            isPaused = true;
-        });
-        
-        carousel.addEventListener('mouseleave', () => {
-            isPaused = false;
-            animate();
-        });
-    }
-
-    // Touch support untuk mobile
-    let touchStartX = 0;
-    carousel.addEventListener('touchstart', (e) => {
-        isPaused = true;
-        touchStartX = e.touches[0].clientX;
-    });
-
-    carousel.addEventListener('touchmove', (e) => {
-        if (!isPaused) return;
-        const touchX = e.touches[0].clientX;
-        const diff = touchStartX - touchX;
-        carousel.scrollLeft += diff;
-        touchStartX = touchX;
-    });
-
-    carousel.addEventListener('touchend', () => {
-        isPaused = false;
-        animate();
-    });
-
-    // Cleanup saat komponen unmount (jika diperlukan)
-    return () => {
-        cancelAnimationFrame(animationFrameId);
-    };
-};
-
-// Panggil fungsi saat DOM siap
-document.addEventListener('DOMContentLoaded', initPartnerCarousel);
