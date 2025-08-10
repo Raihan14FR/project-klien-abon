@@ -539,84 +539,65 @@ ul {
 }
 
 @media (max-width: 768px) {
-    .about-section {
-        padding: 40px 0 !important;
-    }
-    
     .about-content {
-        flex-direction: column !important;
-        gap: 30px !important;
+        display: flex;
+        flex-direction: column;
     }
     
-    .about-image {
+    .about-image, 
+    .about-text {
         width: 100% !important;
-        order: 1 !important; /* Change order if needed */
-        margin-bottom: 20px;
-    }
-    
-    .about-image img {
-        border-radius: 8px !important;
-        height: auto !important;
-        max-height: 250px !important;
-        object-fit: cover !important;
+        max-width: 100% !important;
+        padding: 0 !important;
     }
     
     .about-text {
-        width: 100% !important;
-        padding: 0 10px !important;
-        order: 2 !important;
+        margin-top: 20px;
+        text-align: left !important; /* Pastikan rata kiri */
     }
     
     .about-text h2 {
-        font-size: 26px !important;
         text-align: center !important;
-        margin-bottom: 15px !important;
+        font-size: 24px;
     }
     
     .about-text p {
-        font-size: 14px !important;
-        line-height: 1.7 !important;
-        text-align: justify !important;
-        margin-bottom: 20px !important;
+        text-align: justify;
+        padding: 0 5px;
     }
     
     .certifications {
-        flex-direction: column !important;
-        gap: 15px !important;
-        align-items: center !important;
+        flex-direction: column;
+        align-items: flex-start !important; /* Pastikan rata kiri */
+        margin-top: 20px;
     }
     
     .certification-item {
         width: 100% !important;
-        max-width: 280px !important;
+        justify-content: flex-start !important;
+        margin-bottom: 15px;
+    }
+    
+    .certification-text {
+        text-align: left !important;
     }
 }
 
-@media (max-width: 576px) {
-    .about-image img {
-        max-height: 200px !important;
-    }
-    
-    .about-text h2 {
-        font-size: 24px !important;
+/* Perbaikan khusus untuk layar kecil */
+@media (max-width: 480px) {
+    .about-text p {
+        font-size: 14px;
+        line-height: 1.7;
     }
     
     .certification-item {
         flex-direction: row !important;
-        align-items: center !important;
+        align-items: center;
     }
     
     .certification-icon {
-        width: 40px !important;
-        height: 40px !important;
-    }
-    
-    .certification-text h4 {
-        font-size: 15px !important;
-    }
-    
-    .certification-text p {
-        font-size: 13px !important;
+        min-width: 40px !important;
+        margin-right: 12px !important;
     }
 }
 
@@ -1439,5 +1420,6 @@ html, body {
         font-size: 13px !important;
     }
 }
+
 
 
