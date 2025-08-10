@@ -1283,3 +1283,38 @@ html, body {
     width: 100%;
     overflow-x: hidden;
 }
+
+/* Mobile First Approach */
+@media (max-width: 576px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    /* Header Mobile */
+    #header {
+        padding: 10px 0;
+    }
+    
+    .logo img {
+        height: 35px !important;
+    }
+    
+    /* Hero Section */
+    .hero-content {
+        padding: 60px 0 !important;
+    }
+    
+    .hero-headline {
+        font-size: 28px !important;
+    }
+    
+    /* Footer Reorganisasi */
+    .footer-grid {
+        grid-template-columns: 1fr !important;
+        gap: 30px !important;
+    }
+    
+    .map-container {
+        height: 180px !important;
+    }
+}
