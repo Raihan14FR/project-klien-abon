@@ -458,6 +458,7 @@ ul {
     display: flex;
     align-items: center;
     gap: 60px;
+    transition: all 0.3s ease; 
 }
 
 .about-image {
@@ -500,6 +501,7 @@ ul {
     display: flex;
     align-items: center;
     gap: 15px;
+    padding: 10px;
 }
 
 .certification-icon {
@@ -1437,4 +1439,5 @@ html, body {
         font-size: 13px !important;
     }
 }
+
 
