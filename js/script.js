@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     window.addEventListener('scroll', updateHeaderOnScroll);
-    updateHeaderOnScroll();
+    updateHeaderOnScroll(); // Initialize on load
 
     // ======================
     // Mobile Menu Toggle
@@ -24,10 +24,16 @@ document.addEventListener('DOMContentLoaded', function() {
     mobileMenuToggle.addEventListener('click', function() {
         this.classList.toggle('active');
         mainNav.classList.toggle('active');
-        document.body.style.overflow = mainNav.classList.contains('active') ? 'hidden' : '';
+        
+        // Toggle body overflow when menu is open
+        if (mainNav.classList.contains('active')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
     });
 
-    // Close mobile menu when clicking nav links
+    // Close mobile menu when clicking on nav links
     document.querySelectorAll('.main-nav a').forEach(link => {
         link.addEventListener('click', () => {
             if (mainNav.classList.contains('active')) {
@@ -64,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     window.addEventListener('scroll', setActiveLink);
-    setActiveLink();
+    setActiveLink(); // Initialize on load
 
     // ======================
     // Hero Slider
@@ -75,18 +81,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const nextBtn = document.querySelector('.slider-next');
     let currentSlide = 0;
     let slideInterval;
-    const slideDuration = 10000;
+    const slideDuration = 10000; // 10 seconds
     
     function showSlide(n) {
         slides.forEach(slide => slide.classList.remove('active'));
         dots.forEach(dot => dot.classList.remove('active'));
+        
         currentSlide = (n + slides.length) % slides.length;
         slides[currentSlide].classList.add('active');
         dots[currentSlide].classList.add('active');
     }
     
-    function nextSlide() { showSlide(currentSlide + 1); }
-    function prevSlide() { showSlide(currentSlide - 1); }
+    function nextSlide() {
+        showSlide(currentSlide + 1);
+    }
+    
+    function prevSlide() {
+        showSlide(currentSlide - 1);
+    }
     
     function startSlider() {
         slideInterval = setInterval(nextSlide, slideDuration);
@@ -97,41 +109,130 @@ document.addEventListener('DOMContentLoaded', function() {
         startSlider();
     }
     
-    nextBtn.addEventListener('click', () => { nextSlide(); resetSliderTimer(); });
-    prevBtn.addEventListener('click', () => { prevSlide(); resetSliderTimer(); });
-    
-    dots.forEach((dot, index) => {
-        dot.addEventListener('click', () => { showSlide(index); resetSliderTimer(); });
+    // Event Listeners for Slider
+    nextBtn.addEventListener('click', function() {
+        nextSlide();
+        resetSliderTimer();
     });
     
+    prevBtn.addEventListener('click', function() {
+        prevSlide();
+        resetSliderTimer();
+    });
+    
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', function() {
+            showSlide(index);
+            resetSliderTimer();
+        });
+    });
+    
+    // Start the slider
     startSlider();
 
     // Pause slider on hover
     const sliderContainer = document.querySelector('.slider-container');
-    sliderContainer.addEventListener('mouseenter', () => clearInterval(slideInterval));
-    sliderContainer.addEventListener('mouseleave', resetSliderTimer);
+    sliderContainer.addEventListener('mouseenter', () => {
+        clearInterval(slideInterval);
+    });
+    
+    sliderContainer.addEventListener('mouseleave', () => {
+        resetSliderTimer();
+    });
 
     // ======================
-    // Language Switcher
+    // Language Switcher with Flags
     // ======================
     const languageSelect = document.getElementById('language-select');
     const selectedFlagIcon = document.getElementById('selected-flag-icon');
     const translatableElements = document.querySelectorAll('[data-i18n]');
     
+    // Translation dictionary
     const translations = {
-        en: { /* ... (isi terjemahan English sama seperti sebelumnya) ... */ },
-        id: { /* ... (isi terjemahan Indonesian sama seperti sebelumnya) ... */ }
+        en: {
+            "hero_title": "Premium Indonesian Shredded Meat for the World",
+            "order_now": "Order Now",
+            "learn_more": "Learn More",
+            "about_title": "About Cap Pelangi Mas",
+            "about_description": "Since 1995, Cap Pelangi Mas has been producing premium quality shredded meat products using carefully selected ingredients and traditional recipes. Our products are known for their authentic taste and have been exported to 15 countries worldwide, bringing the rich flavor of Indonesian cuisine to global markets.",
+            "products_title": "Our Premium Products",
+            "product_shelf_life": "6 months shelf life",
+            "product_packaging": "200g net weight",
+            "product_ingredients": "Premium chicken, selected spices",
+            "partners_title": "Our Trusted Partners",
+            "delivery_title": "Global Delivery Network",
+            "delivery_subtitle": "Trusted by customers worldwide",
+            "delivery_text1": "Professional Packing",
+            "delivery_text2": "Quality Checked",
+            "delivery_text3": "Global Logistics",
+            "contact_title": "Get in Touch",
+            "contact_name": "Name",
+            "contact_email": "Email",
+            "contact_message": "Message",
+            "contact_send": "Send Message",
+            "footer_contact": "Contact Info",
+            "footer_hours": "Monday - Friday: 8AM - 5PM\nSaturday: 9AM - 2PM",
+            "footer_location": "Our Location",
+            "footer_social": "Connect With Us",
+            "footer_whatsapp": "Chat on WhatsApp",
+            "footer_rights": "All Rights Reserved",
+            "contact_subtitle": "For inquiries or orders, please fill out the form below",
+            "contact_message": "Your Message"
+        },
+            id: {
+            "hero_title": "Abon dari Indonesia dengan kualitas Premium untuk Dunia",
+            "order_now": "Pesan Sekarang",
+            "learn_more": "Pelajari Lebih Lanjut",
+            "about_title": "Tentang Cap Pelangi Mas",
+            "about_description": "Sejak 1995, Cap Pelangi Mas memproduksi abon berkualitas premium dengan bahan pilihan dan resep tradisional. Produk kami dikenal dengan cita rasa autentik dan telah diekspor ke 15 negara di seluruh dunia, menghadirkan kekayaan rasa kuliner Indonesia ke pasar global.",
+            "products_title": "Produk Unggulan Kami",
+            "product_shelf_life": "Masa simpan 6 bulan",
+            "product_packaging": "Berat bersih 200g",
+            "product_ingredients": "Daging ayam premium, rempah pilihan",
+            "partners_title": "Mitra Terpercaya Kami",
+            "delivery_title": "Jaringan Pengiriman Global",
+            "delivery_subtitle": "Dipercaya pelanggan di seluruh dunia",
+            "delivery_text1": "Pengepakan Profesional",
+            "delivery_text2": "Pemeriksaan Kualitas",
+            "delivery_text3": "Logistik Global",
+            "contact_title": "Hubungi Kami",
+            "contact_name": "Nama",
+            "contact_email": "Email",
+            "contact_message": "Pesan",
+            "contact_send": "Kirim Pesan",
+            "footer_contact": "Informasi Kontak",
+            "footer_hours": "Senin - Jumat: 08.00 - 17.00\nSabtu: 09.00 - 14.00",
+            "footer_location": "Lokasi Kami",
+            "footer_social": "Media Sosial",
+            "footer_whatsapp": "Chat via WhatsApp",
+            "footer_rights": "Hak Cipta Dilindungi",
+            "contact_message": "Pesan Anda",
+            "contact_subtitle": "Untuk pertanyaan atau pemesanan, silakan isi formulir di bawah ini"
+        }
     };
     
     function updateContent(lang) {
+        // Temporarily hide content to prevent layout shift
         document.body.style.opacity = '0';
+        
         translatableElements.forEach(element => {
             const key = element.getAttribute('data-i18n');
-            if (translations[lang]?.[key]) element.textContent = translations[lang][key];
+            if (translations[lang] && translations[lang][key]) {
+                element.textContent = translations[lang][key];
+            }
         });
-        selectedFlagIcon.src = lang === 'en' ? 'assets/icons/gb-eng.svg' : 'assets/icons/id.svg';
+        
+        // Update flag icon
+        const flagPath = lang === 'en' 
+            ? 'assets/icons/gb-eng.svg' 
+            : 'assets/icons/id.svg';
+        selectedFlagIcon.src = flagPath;
         selectedFlagIcon.alt = lang === 'en' ? 'English' : 'Indonesian';
-        setTimeout(() => { document.body.style.opacity = '1'; }, 50);
+        
+        // Restore visibility after a short delay
+        setTimeout(() => {
+            document.body.style.opacity = '1';
+        }, 50);
     }
     
     languageSelect.addEventListener('change', function() {
@@ -140,7 +241,10 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('preferredLang', selectedLang);
     });
     
-    updateContent(localStorage.getItem('preferredLang') || 'en');
+    // Initialize with preferred language
+    const preferredLang = localStorage.getItem('preferredLang') || 'en';
+    languageSelect.value = preferredLang;
+    updateContent(preferredLang);
 
     // ======================
     // Smooth Scrolling
@@ -148,83 +252,38 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             e.preventDefault();
+            
             const targetId = this.getAttribute('href');
             if (targetId === '#') return;
             
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
+                // Close mobile menu if open
                 if (mainNav.classList.contains('active')) {
                     mobileMenuToggle.classList.remove('active');
                     mainNav.classList.remove('active');
                     document.body.style.overflow = '';
                 }
-                window.scrollTo({ top: targetElement.offsetTop - 50, behavior: 'smooth' });
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 50,
+                    behavior: 'smooth'
+                });
             }
         });
     });
 
-    // ======================
-    // Partner Carousel (FIXED FOR MOBILE & DESKTOP)
-    // ======================
-    const partnerCarousel = document.querySelector('.partners-carousel');
-    const partnerLogos = document.querySelectorAll('.partner-logo');
-    let isDragging = false;
-    let startX, scrollLeft;
-
-    // Auto-scroll animation
-    function startAutoScroll() {
-        let scrollAmount = 0;
-        const scrollSpeed = 1; // Adjust speed here
-        
-        function animate() {
-            partnerCarousel.scrollLeft += scrollSpeed;
-            scrollAmount += Math.abs(scrollSpeed);
-            
-            // Reset scroll position to create infinite loop
-            if (scrollAmount >= partnerCarousel.scrollWidth / 2) {
-                partnerCarousel.scrollLeft = 0;
-                scrollAmount = 0;
-            }
-            
-            if (!isDragging) requestAnimationFrame(animate);
-        }
-        
-        animate();
-    }
-
-    // Pause on hover (desktop only)
-    if (window.matchMedia("(hover: hover)").matches) {
-        partnerCarousel.addEventListener('mouseenter', () => {
-            isDragging = true;
-        });
-        
-        partnerCarousel.addEventListener('mouseleave', () => {
-            isDragging = false;
-            startAutoScroll();
-        });
-    }
-
-    // Touch support for mobile
-    partnerCarousel.addEventListener('touchstart', (e) => {
-        isDragging = true;
-        startX = e.touches[0].pageX - partnerCarousel.offsetLeft;
-        scrollLeft = partnerCarousel.scrollLeft;
+    document.querySelectorAll('.partner-logo').forEach(logo => {
+    logo.addEventListener('mouseenter', () => {
+        const carousel = document.querySelector('.partners-carousel');
+        carousel.style.animationPlayState = 'paused';
     });
-
-    partnerCarousel.addEventListener('touchmove', (e) => {
-        if (!isDragging) return;
-        e.preventDefault();
-        const x = e.touches[0].pageX - partnerCarousel.offsetLeft;
-        const walk = (x - startX) * 2; // Scroll speed multiplier
-        partnerCarousel.scrollLeft = scrollLeft - walk;
+    
+    logo.addEventListener('mouseleave', () => {
+        const carousel = document.querySelector('.partners-carousel');
+        carousel.style.animationPlayState = 'running';
     });
-
-    partnerCarousel.addEventListener('touchend', () => {
-        isDragging = false;
-    });
-
-    // Start the carousel
-    startAutoScroll();
+});
 
     // ======================
     // Prevent Layout Shift on Load
