@@ -530,14 +530,6 @@ ul {
     color: var(--text-color);
     margin: 0;
 }
-
-/* Flip Card Product Section */
-.products-section {
-    background-color: #f9f9f9;
-    padding: 50px 0;
-    perspective: 1000px;
-}
-
 @media (max-width: 768px) {
     .about-content {
         display: flex;
@@ -601,6 +593,12 @@ ul {
     }
 }
 
+/* Flip Card Product Section */
+.products-section {
+    background-color: #f9f9f9;
+    padding: 50px 0;
+    perspective: 1000px;
+}
 .products-section h2 {
     text-align: center;
     font-size: 36px;
@@ -1420,6 +1418,7 @@ html, body {
         font-size: 13px !important;
     }
 }
+
 
 
 
