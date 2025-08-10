@@ -291,4 +291,37 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('load', function() {
         document.body.style.opacity = '1';
     });
+
 });
+
+// Deteksi ketika carousel masuk viewport
+function handleIntersection(entries) {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('in-viewport');
+        } else {
+            entry.target.classList.remove('in-viewport');
+        }
+    });
+}
+
+const observer = new IntersectionObserver(handleIntersection, {
+    threshold: 0.1
+});
+
+document.querySelectorAll('.partners-carousel').forEach(carousel => {
+    observer.observe(carousel);
+});
+
+// Force redraw untuk memicu animasi di mobile
+function activateMobileAnimation() {
+    if (/Mobi|Android/i.test(navigator.userAgent)) {
+        const carousel = document.querySelector('.partners-carousel');
+        carousel.style.display = 'none';
+        carousel.offsetHeight; // Trigger reflow
+        carousel.style.display = 'flex';
+    }
+}
+
+window.addEventListener('load', activateMobileAnimation);
+window.addEventListener('orientationchange', activateMobileAnimation);
