@@ -763,11 +763,24 @@ ul {
     font-size: clamp(28px, 5vw, 36px);
     color: var(--dark-color);
     margin-bottom: 30px;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.partners-section h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background-color: var(--primary-color);
 }
 
 .indonesia-map {
     max-width: 700px;
-    margin: 0 auto 30px;
+    margin: 0 auto 40px;
     text-align: center;
     padding: 0 20px;
 }
@@ -780,11 +793,17 @@ ul {
     transition: filter 0.3s ease;
 }
 
+.indonesia-map:hover .indonesia-svg {
+    filter: grayscale(50%) brightness(1);
+}
+
+/* CAROUSEL IMPROVEMENTS */
 .partners-carousel-container {
     width: 100%;
     overflow: hidden;
     position: relative;
-    padding: 20px 0;
+    padding: 30px 0;
+    margin: 0 auto;
 }
 
 .partners-carousel {
@@ -792,6 +811,7 @@ ul {
     gap: 40px;
     width: max-content;
     will-change: transform;
+    padding: 0 20px; /* Memberi ruang di tepi */
 }
 
 .partner-logo {
@@ -801,6 +821,11 @@ ul {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 10px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
 }
 
 .partner-logo img {
@@ -813,29 +838,17 @@ ul {
     transition: all 0.3s ease;
 }
 
+.partner-logo:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
 .partner-logo:hover img {
     filter: grayscale(0) brightness(1);
     transform: scale(1.05);
 }
 
-/* Animation */
-@keyframes scroll {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(calc(-50% - 20px)); }
-}
-
-/* Mobile Optimization */
-@media (pointer: coarse) {
-    .partners-carousel {
-        animation: scroll 60s linear infinite;
-    }
-    
-    .partner-logo {
-        width: 140px;
-        height: 70px;
-    }
-}
-
+/* RESPONSIVE FIXES */
 @media (max-width: 992px) {
     .partners-section {
         padding: 50px 0;
@@ -850,12 +863,16 @@ ul {
 @media (max-width: 768px) {
     .partners-carousel {
         gap: 30px;
-        animation: scroll 80s linear infinite;
     }
     
     .partner-logo {
         width: 120px;
         height: 60px;
+        padding: 8px;
+    }
+    
+    .indonesia-map {
+        margin-bottom: 30px;
     }
 }
 
@@ -866,7 +883,6 @@ ul {
     
     .partners-carousel {
         gap: 20px;
-        animation: scroll 100s linear infinite;
     }
     
     .partner-logo {
@@ -874,15 +890,9 @@ ul {
         height: 50px;
     }
     
-    @keyframes scroll {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(calc(-50% - 10px)); }
+    .indonesia-svg {
+        max-height: 200px;
     }
-}
-
-/* JavaScript Interaction Class */
-.partners-carousel.paused {
-    animation-play-state: paused;
 }
 
 /* Delivery Proof Section */
@@ -1492,6 +1502,7 @@ html, body {
         font-size: 13px !important;
     }
 }
+
 
 
 
