@@ -292,3 +292,77 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.style.opacity = '1';
     });
 });
+
+const initPartnerCarousel = () => {
+    const carousel = document.querySelector('.partners-carousel');
+    const logos = document.querySelectorAll('.partner-logo');
+    
+    if (!carousel || !logos.length) return;
+
+    // Clone logos untuk efek infinite loop
+    const clonedLogos = Array.from(logos).map(logo => logo.cloneNode(true));
+    clonedLogos.forEach(clone => carousel.appendChild(clone));
+
+    let isPaused = false;
+    let animationFrameId;
+    let scrollSpeed = 1; // Kecepatan scroll (bisa disesuaikan)
+    let direction = -1; // -1 untuk kiri, 1 untuk kanan
+
+    const animate = () => {
+        if (isPaused) return;
+        
+        carousel.scrollLeft += scrollSpeed * direction;
+        
+        // Reset scroll position saat mencapai setengah carousel
+        if (carousel.scrollLeft >= (carousel.scrollWidth / 2)) {
+            carousel.scrollLeft = 0;
+        } else if (carousel.scrollLeft <= 0) {
+            carousel.scrollLeft = carousel.scrollWidth / 2;
+        }
+        
+        animationFrameId = requestAnimationFrame(animate);
+    };
+
+    // Start animation
+    animate();
+
+    // Pause on hover (hanya untuk desktop)
+    if (window.matchMedia("(hover: hover)").matches) {
+        carousel.addEventListener('mouseenter', () => {
+            isPaused = true;
+        });
+        
+        carousel.addEventListener('mouseleave', () => {
+            isPaused = false;
+            animate();
+        });
+    }
+
+    // Touch support untuk mobile
+    let touchStartX = 0;
+    carousel.addEventListener('touchstart', (e) => {
+        isPaused = true;
+        touchStartX = e.touches[0].clientX;
+    });
+
+    carousel.addEventListener('touchmove', (e) => {
+        if (!isPaused) return;
+        const touchX = e.touches[0].clientX;
+        const diff = touchStartX - touchX;
+        carousel.scrollLeft += diff;
+        touchStartX = touchX;
+    });
+
+    carousel.addEventListener('touchend', () => {
+        isPaused = false;
+        animate();
+    });
+
+    // Cleanup saat komponen unmount (jika diperlukan)
+    return () => {
+        cancelAnimationFrame(animationFrameId);
+    };
+};
+
+// Panggil fungsi saat DOM siap
+document.addEventListener('DOMContentLoaded', initPartnerCarousel);
