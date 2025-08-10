@@ -826,12 +826,15 @@ ul {
 }
 
 @keyframes scroll {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(calc(-160px * 13));
-    }
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(-100% / 2)); }
+}
+.partners-carousel {
+    animation: scroll 30s linear infinite;
+    width: calc(200% + 60px); /* 2x lebar konten + gap */
+}
+.partners-carousel.in-viewport {
+    animation-play-state: running;
 }
 
 @media (max-width: 576px) {
@@ -1452,6 +1455,7 @@ html, body {
         font-size: 13px !important;
     }
 }
+
 
 
 
