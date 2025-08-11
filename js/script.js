@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     window.addEventListener('scroll', updateHeaderOnScroll);
-    updateHeaderOnScroll();
+    updateHeaderOnScroll(); // Initialize on load
 
     // ======================
     // Mobile Menu Toggle
@@ -24,10 +24,16 @@ document.addEventListener('DOMContentLoaded', function() {
     mobileMenuToggle.addEventListener('click', function() {
         this.classList.toggle('active');
         mainNav.classList.toggle('active');
-        document.body.style.overflow = mainNav.classList.contains('active') ? 'hidden' : '';
+        
+        // Toggle body overflow when menu is open
+        if (mainNav.classList.contains('active')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
     });
 
-    // Close mobile menu when clicking nav links
+    // Close mobile menu when clicking on nav links
     document.querySelectorAll('.main-nav a').forEach(link => {
         link.addEventListener('click', () => {
             if (mainNav.classList.contains('active')) {
@@ -64,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     window.addEventListener('scroll', setActiveLink);
-    setActiveLink();
+    setActiveLink(); // Initialize on load
 
     // ======================
     // Hero Slider
@@ -75,18 +81,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const nextBtn = document.querySelector('.slider-next');
     let currentSlide = 0;
     let slideInterval;
-    const slideDuration = 10000;
+    const slideDuration = 10000; // 10 seconds
     
     function showSlide(n) {
         slides.forEach(slide => slide.classList.remove('active'));
         dots.forEach(dot => dot.classList.remove('active'));
+        
         currentSlide = (n + slides.length) % slides.length;
         slides[currentSlide].classList.add('active');
         dots[currentSlide].classList.add('active');
     }
     
-    function nextSlide() { showSlide(currentSlide + 1); }
-    function prevSlide() { showSlide(currentSlide - 1); }
+    function nextSlide() {
+        showSlide(currentSlide + 1);
+    }
+    
+    function prevSlide() {
+        showSlide(currentSlide - 1);
+    }
     
     function startSlider() {
         slideInterval = setInterval(nextSlide, slideDuration);
@@ -97,27 +109,45 @@ document.addEventListener('DOMContentLoaded', function() {
         startSlider();
     }
     
-    nextBtn.addEventListener('click', () => { nextSlide(); resetSliderTimer(); });
-    prevBtn.addEventListener('click', () => { prevSlide(); resetSliderTimer(); });
-    
-    dots.forEach((dot, index) => {
-        dot.addEventListener('click', () => { showSlide(index); resetSliderTimer(); });
+    // Event Listeners for Slider
+    nextBtn.addEventListener('click', function() {
+        nextSlide();
+        resetSliderTimer();
     });
     
+    prevBtn.addEventListener('click', function() {
+        prevSlide();
+        resetSliderTimer();
+    });
+    
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', function() {
+            showSlide(index);
+            resetSliderTimer();
+        });
+    });
+    
+    // Start the slider
     startSlider();
 
     // Pause slider on hover
     const sliderContainer = document.querySelector('.slider-container');
-    sliderContainer.addEventListener('mouseenter', () => clearInterval(slideInterval));
-    sliderContainer.addEventListener('mouseleave', resetSliderTimer);
+    sliderContainer.addEventListener('mouseenter', () => {
+        clearInterval(slideInterval);
+    });
+    
+    sliderContainer.addEventListener('mouseleave', () => {
+        resetSliderTimer();
+    });
 
     // ======================
-    // Language Switcher
+    // Language Switcher with Flags
     // ======================
     const languageSelect = document.getElementById('language-select');
     const selectedFlagIcon = document.getElementById('selected-flag-icon');
     const translatableElements = document.querySelectorAll('[data-i18n]');
     
+    // Translation dictionary
     const translations = {
         en: {
             "hero_title": "Premium Indonesian Shredded Meat for the World",
@@ -180,17 +210,29 @@ document.addEventListener('DOMContentLoaded', function() {
             "contact_subtitle": "Untuk pertanyaan atau pemesanan, silakan isi formulir di bawah ini"
         }
     };
-    };
     
     function updateContent(lang) {
+        // Temporarily hide content to prevent layout shift
         document.body.style.opacity = '0';
+        
         translatableElements.forEach(element => {
             const key = element.getAttribute('data-i18n');
-            if (translations[lang]?.[key]) element.textContent = translations[lang][key];
+            if (translations[lang] && translations[lang][key]) {
+                element.textContent = translations[lang][key];
+            }
         });
-        selectedFlagIcon.src = lang === 'en' ? 'assets/icons/gb-eng.svg' : 'assets/icons/id.svg';
+        
+        // Update flag icon
+        const flagPath = lang === 'en' 
+            ? 'assets/icons/gb-eng.svg' 
+            : 'assets/icons/id.svg';
+        selectedFlagIcon.src = flagPath;
         selectedFlagIcon.alt = lang === 'en' ? 'English' : 'Indonesian';
-        setTimeout(() => { document.body.style.opacity = '1'; }, 50);
+        
+        // Restore visibility after a short delay
+        setTimeout(() => {
+            document.body.style.opacity = '1';
+        }, 50);
     }
     
     languageSelect.addEventListener('change', function() {
@@ -199,7 +241,10 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('preferredLang', selectedLang);
     });
     
-    updateContent(localStorage.getItem('preferredLang') || 'en');
+    // Initialize with preferred language
+    const preferredLang = localStorage.getItem('preferredLang') || 'en';
+    languageSelect.value = preferredLang;
+    updateContent(preferredLang);
 
     // ======================
     // Smooth Scrolling
@@ -207,100 +252,38 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             e.preventDefault();
+            
             const targetId = this.getAttribute('href');
             if (targetId === '#') return;
             
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
+                // Close mobile menu if open
                 if (mainNav.classList.contains('active')) {
                     mobileMenuToggle.classList.remove('active');
                     mainNav.classList.remove('active');
                     document.body.style.overflow = '';
                 }
-                window.scrollTo({ top: targetElement.offsetTop - 50, behavior: 'smooth' });
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 50,
+                    behavior: 'smooth'
+                });
             }
         });
     });
 
-    // ======================
-    // Partner Carousel (FIXED FOR ALL DEVICES)
-    // ======================
-    const initPartnerCarousel = () => {
-        const container = document.querySelector('.partners-carousel-container');
+    document.querySelectorAll('.partner-logo').forEach(logo => {
+    logo.addEventListener('mouseenter', () => {
         const carousel = document.querySelector('.partners-carousel');
-        const logos = document.querySelectorAll('.partner-logo');
-        
-        if (!carousel || !logos.length) return;
-
-        // Clone logos for infinite loop effect
-        const clonedLogos = Array.from(logos).map(logo => logo.cloneNode(true));
-        clonedLogos.forEach(clone => carousel.appendChild(clone));
-
-        let speed = 1.5;
-        let isScrolling = true;
-        let animationId;
-        let isDragging = false;
-        let startX, scrollLeft;
-
-        function autoScroll() {
-            if (!isScrolling || isDragging) return;
-            
-            carousel.scrollLeft += speed;
-            
-            // Reset when reaching half of carousel
-            if (carousel.scrollLeft >= (carousel.scrollWidth / 2)) {
-                carousel.scrollLeft = 0;
-            }
-            
-            animationId = requestAnimationFrame(autoScroll);
-        }
-
-        // Start auto-scroll
-        autoScroll();
-
-        // Pause on hover (desktop only)
-        if (window.matchMedia("(hover: hover)").matches) {
-            container.addEventListener('mouseenter', () => {
-                isScrolling = false;
-            });
-            
-            container.addEventListener('mouseleave', () => {
-                isScrolling = true;
-                autoScroll();
-            });
-        }
-
-        // Touch support for mobile
-        carousel.addEventListener('touchstart', (e) => {
-            isDragging = true;
-            isScrolling = false;
-            startX = e.touches[0].pageX;
-            scrollLeft = carousel.scrollLeft;
-            cancelAnimationFrame(animationId);
-        }, { passive: true });
-
-        carousel.addEventListener('touchmove', (e) => {
-            if (!isDragging) return;
-            e.preventDefault();
-            const x = e.touches[0].pageX;
-            const walk = (x - startX) * 2;
-            carousel.scrollLeft = scrollLeft - walk;
-        }, { passive: false });
-
-        carousel.addEventListener('touchend', () => {
-            isDragging = false;
-            isScrolling = true;
-            autoScroll();
-        });
-
-        // Cleanup on resize
-        window.addEventListener('resize', () => {
-            carousel.scrollLeft = 0;
-        });
-    };
-
-    // Initialize partner carousel
-    initPartnerCarousel();
+        carousel.style.animationPlayState = 'paused';
+    });
+    
+    logo.addEventListener('mouseleave', () => {
+        const carousel = document.querySelector('.partners-carousel');
+        carousel.style.animationPlayState = 'running';
+    });
+});
 
     // ======================
     // Prevent Layout Shift on Load
