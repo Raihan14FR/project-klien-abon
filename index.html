@@ -12,52 +12,66 @@
 </head>
 <body>
     <!-- Header Section -->
-    <header id="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <a href="#home">
-                        <img src="assets/icons/ubuntu-orange.svg" alt="Cap Pelangi Mas Logo">
-                    </a>
-                </div>
-
-                <nav class="main-nav">
-                    <ul>
-                        <li><a href="#home" class="nav-link active">Home</a></li>
-                        <li><a href="#about" class="nav-link">About</a></li>
-                        <li><a href="#products" class="nav-link">Products</a></li>
-                        <li><a href="#partners" class="nav-link">Partners</a></li>
-                        <li><a href="#delivery" class="nav-link">Delivery</a></li>
-                        <li><a href="#contact" class="nav-link">Contact</a></li>
-                    </ul>
-                </nav>
-                
-                <!-- Language Switcher -->
-                <div class="language-switcher">
-                    <div class="custom-select">
-                        <select id="language-select" class="language-select">
-                            <option value="en" selected data-icon="assets/icons/gb-eng.svg"></option>
-            <option value="id" data-icon="assets/icons/id.svg"></option>
-        </select>
-        <div class="select-arrow">
-            <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
-                 <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-            </div>
+<header id="header">
+  <div class="container">
+    <div class="header-content">
+      <div class="logo">
+        <a href="#home" aria-label="Cap Pelangi Mas Home">
+          <img src="assets/icons/ubuntu-orange.svg" alt="Cap Pelangi Mas Logo" width="40" height="40">
+        </a>
+      </div>
+      <nav class="main-nav" aria-label="Primary navigation">
+        <ul class="nav-list">
+          <li class="nav-item">
+            <a href="#home" class="nav-link active" aria-current="page">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="#about" class="nav-link">About</a>
+          </li>
+          <li class="nav-item">
+            <a href="#products" class="nav-link">Products</a>
+          </li>
+          <li class="nav-item">
+            <a href="#partners" class="nav-link">Partners</a>
+          </li>
+          <li class="nav-item">
+            <a href="#delivery" class="nav-link">Delivery</a>
+          </li>
+          <li class="nav-item">
+            <a href="#contact" class="nav-link">Contact</a>
+          </li>
+        </ul>
+      </nav>
+      <div class="header-right">
+        <div class="language-switcher">
+          <div class="custom-select" aria-label="Language selector">
+            <select id="language-select" class="language-select" aria-label="Select language">
+              <option value="en" selected>EN</option>
+              <option value="id">ID</option>
+            </select>
             <div class="selected-flag">
-                <img src="assets/icons/gb-eng.svg" alt="English" id="selected-flag-icon">
+              <img src="assets/icons/gb-eng.svg" alt="English" id="selected-flag-icon" width="24" height="18" loading="lazy">
             </div>
-        </div>
-    </div>                                
-                <!-- Mobile Menu Toggle -->
-                <div class="mobile-menu-toggle">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                </div>
+            <div class="select-arrow" aria-hidden="true">
+              <svg width="12" height="8" viewBox="0 0 12 8" fill="none" focusable="false">
+                <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
             </div>
+          </div>
         </div>
-    </header>
+        <a href="#contact" class="order-now-btn">
+            <img src="assets/icons/cart-icon.svg" alt="Cart">
+            <span data-i18n="order">Order</span>
+        </a>
+      </div>
+      <button class="mobile-menu-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="main-nav">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+    </div>
+  </div>
+</header>
 
     <!-- Hero Section -->
     <section class="hero" id="home">
@@ -68,10 +82,6 @@
                     <!-- Hero Text -->
                     <div class="hero-text">
                         <h1 class="hero-headline" data-i18n="hero_title">Premium Indonesian Shredded Meat for the World</h1>
-                        <div class="hero-buttons">
-                            <a href="#products" class="btn btn-primary" data-i18n="order_now">Order Now</a>
-                            <a href="#about" class="btn btn-secondary" data-i18n="learn_more">Learn More</a>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -188,7 +198,7 @@
                             <span data-i18n="product_ingredients">Premium chicken, selected spices</span>
                         </div>
                     </div>
-                    <a href="#contact" class="btn btn-primary" data-i18n="order_now">Order Now</a>
+                    <a href="#order" class="btn btn-primary" data-i18n="order_now">Order Now</a>
                 </div>
             </div>
         </div>
@@ -404,5 +414,3 @@
     <script src="js/script.js"></script>
 </body>
 </html>
-
-
