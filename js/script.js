@@ -2,18 +2,58 @@ document.addEventListener('DOMContentLoaded', function() {
     // ======================
     // Header Scroll Effect
     // ======================
-    const header = document.getElementById('header');
+let lastScrollPosition = 0;
+
+function updateHeaderState() {
+  const header = document.getElementById('header');
+  const homeSection = document.getElementById('home');
+  const currentScroll = window.scrollY;
+  
+  // Check if we're in home section
+  const isInHome = homeSection && 
+                 currentScroll < homeSection.offsetHeight && 
+                 currentScroll >= 0;
+
+  // Apply effects based on scroll position
+  if (currentScroll > 20) {
+    header.classList.add('scrolled');
     
-    function updateHeaderOnScroll() {
-        if (window.scrollY > 50) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
-        }
+    // Only remove blur if we've scrolled past home section
+    if (!isInHome) {
+      header.style.backdropFilter = 'none';
+      header.style.backgroundColor = 'rgba(255, 255, 255, 0.98)';
     }
-    
-    window.addEventListener('scroll', updateHeaderOnScroll);
-    updateHeaderOnScroll(); // Initialize on load
+  } else {
+    header.classList.remove('scrolled');
+    if (isInHome) {
+      header.style.backdropFilter = 'blur(10px)';
+      header.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+    }
+  }
+
+  lastScrollPosition = currentScroll;
+}
+
+// Optimized Scroll Event
+let isTicking = false;
+window.addEventListener('scroll', () => {
+  if (!isTicking) {
+    window.requestAnimationFrame(() => {
+      updateHeaderState();
+      isTicking = false;
+    });
+    isTicking = true;
+  }
+}, { passive: true });
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+  // Add home class to body if on homepage
+  if (window.location.pathname === '/' || window.location.hash === '#home') {
+    document.body.classList.add('home');
+  }
+  updateHeaderState();
+});
 
     // ======================
     // Mobile Menu Toggle
@@ -21,15 +61,31 @@ document.addEventListener('DOMContentLoaded', function() {
     const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
     const mainNav = document.querySelector('.main-nav');
     
-    mobileMenuToggle.addEventListener('click', function() {
-        this.classList.toggle('active');
-        mainNav.classList.toggle('active');
+    function toggleMobileMenu() {
+        const isOpening = !mobileMenuToggle.classList.contains('active');
         
-        // Toggle body overflow when menu is open
-        if (mainNav.classList.contains('active')) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
+        mobileMenuToggle.classList.toggle('active');
+        mainNav.classList.toggle('active');
+        document.body.style.overflow = isOpening ? 'hidden' : '';
+        
+        // Add ARIA attributes for accessibility
+        mobileMenuToggle.setAttribute('aria-expanded', isOpening);
+    }
+
+    mobileMenuToggle.addEventListener('click', toggleMobileMenu);
+
+    // Close menu when clicking links (improved)
+    document.querySelectorAll('.main-nav a').forEach(link => {
+        link.addEventListener('click', () => {
+            if (mainNav.classList.contains('active')) {
+                toggleMobileMenu();
+            }
+        });
+    });
+
+        document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && mainNav.classList.contains('active')) {
+            toggleMobileMenu();
         }
     });
 
@@ -151,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const translations = {
         en: {
             "hero_title": "Premium Indonesian Shredded Meat for the World",
-            "order_now": "Order Now",
+            "order_now": "s",
             "learn_more": "Learn More",
             "about_title": "About Cap Pelangi Mas",
             "about_description": "Since 1995, Cap Pelangi Mas has been producing premium quality shredded meat products using carefully selected ingredients and traditional recipes. Our products are known for their authentic taste and have been exported to 15 countries worldwide, bringing the rich flavor of Indonesian cuisine to global markets.",
