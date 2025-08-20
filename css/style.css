@@ -512,7 +512,6 @@ ul {
 .hero {
   position: relative;
   height: 100vh;
-  min-height: 680px;
   max-height: 1200px;
   color: white;
   overflow: hidden;
@@ -1591,4 +1590,5 @@ img {
   .contact-form textarea {
     padding-left: 40px;
   }
+
 }
