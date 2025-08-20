@@ -129,59 +129,71 @@ document.addEventListener('DOMContentLoaded', function () {
   // ======================
   // Hero Slider
   // ======================
-  document.addEventListener('DOMContentLoaded', function () {
-    const slides = document.querySelectorAll('.slide');
-    const dots = document.querySelectorAll('.dot');
-    let currentSlide = 0;
-    let slideInterval;
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.dot');
+  let currentSlide = 0;
+  let slideInterval;
 
-    // Function to show a specific slide
-    function showSlide(n) {
-      // Remove active class from all slides and dots
-      slides.forEach(slide => slide.classList.remove('active'));
-      dots.forEach(dot => dot.classList.remove('active'));
+  // Function to show a specific slide
+  function showSlide(n) {
+    // Remove active class from all slides and dots
+    slides.forEach(slide => slide.classList.remove('active'));
+    dots.forEach(dot => dot.classList.remove('active'));
 
-      // Calculate the current slide index with wrapping
-      currentSlide = (n + slides.length) % slides.length;
+    // Calculate the current slide index with wrapping
+    currentSlide = (n + slides.length) % slides.length;
 
-      // Add active class to the current slide and dot
-      slides[currentSlide].classList.add('active');
+    // Add active class to the current slide and dot
+    slides[currentSlide].classList.add('active');
+    if (dots.length > currentSlide) {
       dots[currentSlide].classList.add('active');
     }
+  }
 
-    // Function to move to next slide
-    function nextSlide() {
-      showSlide(currentSlide + 1);
+  // Function to move to next slide
+  function nextSlide() {
+    showSlide(currentSlide + 1);
+  }
+
+  // Function to start the automatic slider
+  function startSlider() {
+    // Clear any existing interval first
+    stopSlider();
+    // Change slide every 10 seconds (10000 milliseconds)
+    slideInterval = setInterval(nextSlide, 10000);
+  }
+
+  // Function to stop the automatic slider
+  function stopSlider() {
+    if (slideInterval) {
+      clearInterval(slideInterval);
+      slideInterval = null;
     }
+  }
 
-    // Function to start the automatic slider
-    function startSlider() {
-      slideInterval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
-    }
-
-    // Add click event to dots for manual navigation
-    dots.forEach((dot, index) => {
-      dot.addEventListener('click', () => {
-        // Reset timer when manually navigating
-        clearInterval(slideInterval);
-        showSlide(index);
-        startSlider();
-      });
-    });
-
-    // Start the slider
-    if (slides.length > 0) {
-      showSlide(0); // Show first slide initially
+  // Add click event to dots for manual navigation
+  dots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+      // Reset timer when manually navigating
+      stopSlider();
+      showSlide(index);
       startSlider();
-
-      // Pause slider on hover
-      const slider = document.querySelector('.hero-slider');
-      if (slider) {
-        slider.addEventListener('mouseenter', () => clearInterval(slideInterval));
-        slider.addEventListener('mouseleave', startSlider);
-      }
-    }
+    });
   });
+
+  // Start the slider
+  if (slides.length > 0) {
+    showSlide(0);
+    startSlider();
+
+    // Pause slider on hover
+    const slider = document.querySelector('.hero-slider');
+    if (slider) {
+      slider.addEventListener('mouseenter', stopSlider);
+      slider.addEventListener('mouseleave', startSlider);
+    }
+  }
+
 
   // ======================
   // Language Switcher with Flags
@@ -221,6 +233,19 @@ document.addEventListener('DOMContentLoaded', function () {
       "footer_rights": "All Rights Reserved",
       "contact_subtitle": "For inquiries or orders, please fill out the form below",
       "contact_message": "Your Message",
+      "partners_count": "+60 partners have collaborated with us",
+      "order": "Order",
+      "footer_social": "Connect with Us",
+      "footer_contact": "Contact Info",
+      "footer_location": "Our Location",
+      "footer_whatsapp": "Chat on WhatsApp",
+      "footer_rights": "All Rights Reserved",
+      "menu_home": "Home",
+      "menu_about": "About",
+      "menu_products": "Products",
+      "menu_partners": "Partners",
+      "menu_delivery": "Delivery",
+      "menu_contact": "Contact",
     },
     id: {
       "hero_title": "Abon dari Indonesia dengan kualitas Premium untuk Dunia",
@@ -250,7 +275,20 @@ document.addEventListener('DOMContentLoaded', function () {
       "footer_whatsapp": "Chat via WhatsApp",
       "footer_rights": "Hak Cipta Dilindungi",
       "contact_message": "Pesan Anda",
-      "contact_subtitle": "Untuk pertanyaan atau pemesanan, silakan isi formulir di bawah ini"
+      "contact_subtitle": "Untuk pertanyaan atau pemesanan, silakan isi formulir di bawah ini",
+      "partners_count": "+60 partner telah bekerja sama dengan kami",
+      "order": "Pesan",
+      "footer_social": "Media Sosial",
+      "footer_contact": "Informasi Kontak",
+      "footer_location": "Lokasi Kami",
+      "footer_whatsapp": "Chat via WhatsApp",
+      "footer_rights": "Hak Cipta Dilindungi",
+      "menu_home": "Beranda",
+      "menu_about": "Tentang",
+      "menu_products": "Produk",
+      "menu_partners": "Mitra",
+      "menu_delivery": "Pengiriman",
+      "menu_contact": "Kontak",
     }
   };
 
