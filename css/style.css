@@ -906,6 +906,14 @@ ul {
   text-align: center;
   font-size: 36px;
   color: var(--dark-color);
+  margin-bottom: 15px;
+}
+
+.partners-count {
+  text-align: center;
+  font-size: 18px;
+  color: var(--primary-color);
+  font-weight: 600;
   margin-bottom: 30px;
 }
 
@@ -1116,6 +1124,13 @@ ul {
 
   .delivery-item {
     aspect-ratio: 16/9;
+  }
+}
+
+@media (max-width: 480px) {
+  .partners-count {
+    font-size: 14px;
+    margin-bottom: 20px;
   }
 }
 
@@ -1537,7 +1552,7 @@ img {
 .partners-section,
 .delivery-section,
 .contact-section {
-  padding: 80px 0;
+  padding: 40px 0;
 }
 
 @media (max-width: 768px) {
